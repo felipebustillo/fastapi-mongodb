@@ -1,18 +1,16 @@
-import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from api.v1.users.routers import get_users_router
-from core.config import settings
+from api.v1.users import routers
 
 app = FastAPI()
 
-# Add FastAPI Users router
-app.include_router(get_users_router())
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-if __name__ == "__main__":
-    uvicorn.run(
-        "main:app",
-        host=settings.HOST,
-        reload=settings.DEBUG_MODE,
-        port=settings.PORT,
-    )
+app.include_router(routers.get_users_router())

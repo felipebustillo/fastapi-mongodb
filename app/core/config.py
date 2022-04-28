@@ -1,5 +1,10 @@
+import os
+
+from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseSettings
+
+load_dotenv()
 
 
 class CommonSettings(BaseSettings):
@@ -13,8 +18,8 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    MONGO_URI: str
-    DB_NAME: str
+    MONGO_URI: str = os.getenv('MONGO_URI')
+    DB_NAME: str = os.getenv('DB_NAME')
 
 
 class AuthSettings(BaseSettings):
