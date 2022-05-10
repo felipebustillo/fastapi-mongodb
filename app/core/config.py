@@ -28,7 +28,7 @@ class DatabaseSettings(BaseSettings):
 
 
 class AuthSettings(BaseSettings):
-    JWT_SECRET_KEY: str
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     SECURE_COOKIE: bool = False
     # Google authentication
@@ -36,13 +36,8 @@ class AuthSettings(BaseSettings):
     GOOGLE_OAUTH_CLIENT_SECRET: str = os.getenv("GOOGLE_OAUTH_CLIENT_SECRET")
 
 
-class EmailSettings(BaseSettings):
-    EMAIL_TEST_USER: EmailStr = os.getenv("EMAIL_TEST_USER")
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
-    USERS_OPEN_REGISTRATION: bool = False
-    EMAIL_RESET_TOKEN_EXPIRE_HOURS: int = 48
-    EMAILS_ENABLED: bool = False
+class MailSettings(BaseSettings):
+    SENDGRID_API_KEY: str = os.getenv("SENDGRID_API_KEY")
 
 
 class AdminSettings(BaseSettings):
@@ -54,12 +49,11 @@ class AdminSettings(BaseSettings):
         case_sensitive = True
 
 
-class Settings(CommonSettings, ServerSettings, DatabaseSettings, AuthSettings):
+class Settings(CommonSettings, ServerSettings, DatabaseSettings, AuthSettings, MailSettings, AdminSettings):
     pass
 
 
 settings = Settings()
 
 client = AsyncIOMotorClient(settings.MONGODB_URL + settings.DB_NAME, uuidRepresentation="standard")
-
 db = client.get_default_database()
