@@ -1,31 +1,22 @@
-from typing import List
+from datetime import datetime
 
-from beanie import PydanticObjectId
-from fastapi_users import schemas
-from fastapi_users.db import BaseOAuthAccount, BeanieBaseUser, BeanieUserDatabase
-from pydantic import Field
+from beanie import Document
+from pydantic import EmailStr, BaseModel
 
 
-class OAuthAccount(BaseOAuthAccount):
-    pass
+class User(Document):
+    first_name: str
+    last_name: str
+    email: EmailStr
+    hashed_password: str
+    is_active = True
+    is_verified = False
+    role = 'user'
+    last_login: datetime
+    created = datetime.utcnow()
+    updated = datetime.utcnow()
 
 
-class User(BeanieBaseUser[PydanticObjectId]):
-    oauth_accounts: List[OAuthAccount] = Field(default_factory=list)
-    pass
-
-
-class UserRead(schemas.BaseUser[PydanticObjectId]):
-    pass
-
-
-class UserCreate(schemas.BaseUserCreate):
-    pass
-
-
-class UserUpdate(schemas.BaseUserUpdate):
-    pass
-
-
-async def get_user_db():
-    yield BeanieUserDatabase(User)
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str

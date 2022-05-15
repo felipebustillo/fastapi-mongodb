@@ -2,8 +2,9 @@ from beanie import init_beanie
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .api.v1.auth.routers import router as AuthRouter
 from .api.v1.users.models import User
-from .api.v1.users.routers import users_router
+from .api.v1.users.routers import router as UsersRouter
 from .core.config import settings, db
 
 app = FastAPI(
@@ -28,4 +29,6 @@ async def on_startup():
         ],
     )
 
-    app.include_router(users_router, prefix=settings.API_V1_STR)
+
+app.include_router(AuthRouter, prefix=settings.API_V1_STR)
+app.include_router(UsersRouter, prefix=settings.API_V1_STR)

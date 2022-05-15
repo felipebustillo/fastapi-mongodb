@@ -4,6 +4,7 @@ from typing import List
 from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseSettings, AnyHttpUrl, EmailStr
+from sendgrid import SendGridAPIClient
 
 load_dotenv()
 
@@ -23,7 +24,7 @@ class ServerSettings(BaseSettings):
 
 
 class DatabaseSettings(BaseSettings):
-    MONGODB_URL: str = os.getenv("MONGODB_URL")
+    MONGO_URI: str = os.getenv("MONGODB_URL")
     DB_NAME: str = os.getenv("DB_NAME")
 
 
@@ -55,5 +56,7 @@ class Settings(CommonSettings, ServerSettings, DatabaseSettings, AuthSettings, M
 
 settings = Settings()
 
-client = AsyncIOMotorClient(settings.MONGODB_URL + settings.DB_NAME, uuidRepresentation="standard")
+client = AsyncIOMotorClient(settings.MONGO_URI + settings.DB_NAME, uuidRepresentation="standard")
 db = client.get_default_database()
+
+sendgrid_client = SendGridAPIClient(settings.SENDGRID_API_KEY)
