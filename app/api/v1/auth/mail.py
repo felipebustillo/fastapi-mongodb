@@ -1,20 +1,21 @@
 from sendgrid.helpers.mail import Mail
 
 from app.api.v1.users.models import User
-from app.core.config import sendgrid_client
+from app.core.config import sendgrid_client, settings
 
 
-async def send_verification_token(user: User):
+async def send_verification_email(user: User, token: str):
+    url = settings.HOST + settings.API_V1_STR + "/auth/verify" + token
     message = Mail(
-        from_email='noreply@hanka.ai',
+        from_email="noreply@hanka.ai",
         to_emails=user.email,
     )
     message.dynamic_template_data = {
-        'subject': 'Verify your email',
-        'first_name': user.first_name,
+        "subject": "Verify your email",
+        "first_name": user.first_name,
+        "url": settings.HOST + settings.API_V1_STR + "auth/verify"
     }
-    message.template_id = 'd-15a792de88d944d8af39e39d76cb2dda'
-
+    message.template_id = "d-15a792de88d944d8af39e39d76cb2dda"
     response = sendgrid_client.send(message)
     try:
         print(response.status_code)

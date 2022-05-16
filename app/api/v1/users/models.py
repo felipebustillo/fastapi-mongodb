@@ -8,7 +8,6 @@ from pydantic import EmailStr, BaseModel
 class User(Document):
     first_name: str
     last_name: str
-    username: str
     email: EmailStr
     hashed_password: str
     is_active = True
@@ -17,6 +16,10 @@ class User(Document):
     last_login: Optional[datetime]
     created = datetime.utcnow()
     updated = datetime.utcnow()
+
+    @classmethod
+    async def by_email(cls, email: EmailStr):
+        return await cls.find_one(cls.email == email)
 
 
 class UserRegister(BaseModel):
