@@ -6,10 +6,10 @@ Basic template to build a high performance/async API with FastAPI and MongoDB.
 
 - FastAPI
 - MongoDB
-- JWT and OAuth2 authentication with [FastAPI Users](https://github.com/fastapi-users/fastapi-users)
+- JWT and OAuth2 authentication
+- Beanie ODM
 - Email verification
 - Role based authorization
-- ToDo's CRUD
 - Pagination
 - Docker support
 

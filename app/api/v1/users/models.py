@@ -6,10 +6,10 @@ from pydantic import EmailStr, BaseModel
 
 
 class User(Document):
-    first_name: str
-    last_name: str
+    first_name: Optional[str]
+    last_name: Optional[str]
     email: EmailStr
-    hashed_password: str
+    password: str
     is_active = True
     is_verified = False
     role = "user"
@@ -30,5 +30,12 @@ class UserRegister(BaseModel):
 
 
 class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserUpdate(BaseModel):
+    first_name: str
+    last_name: str
     email: EmailStr
     password: str

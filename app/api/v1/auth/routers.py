@@ -28,15 +28,18 @@ async def register(user_register: UserRegister):
         first_name=user_register.first_name,
         last_name=user_register.last_name,
         email=user_register.email,
-        hashed_password=get_password_hash(user_register.password),
+        password=get_password_hash(user_register.password),
     )
     await user.insert()
     await send_verification_email(user)
-    return Response(status_code=201)
+    return Response(
+        status_code=201,
+        content="User created"
+    )
 
 
-@router.post("/verify")
-async def login(user: UserLogin):
+@router.post("/verify/{token}")
+async def verify(user: UserLogin):
     return user
 
 
