@@ -1,6 +1,7 @@
 from fastapi import APIRouter
+from pydantic import EmailStr
 
-from app.api.v1.users.models import User, UserCreate
+from app.api.v1.users.models import UserRegister, UserLogin
 
 router = APIRouter(
     prefix="/auth",
@@ -9,12 +10,15 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register(user: UserCreate):
-    user = await User.email
-    return "hello"
+async def register(user: UserRegister):
+    return user
 
 
 @router.post("/login")
-async def login(user: UserCreate):
-    user = await User.email
+async def login(user: UserLogin):
     return user
+
+
+@router.post("/forgot-password")
+async def forgot_password(email: EmailStr):
+    return email

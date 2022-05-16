@@ -10,5 +10,5 @@ router = APIRouter(
 
 @router.post("")
 async def create_user(user: User):
-    user.email = 'lol'
+    user.email = "lol"
     return user

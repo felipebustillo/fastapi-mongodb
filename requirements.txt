@@ -1,7 +1,6 @@
-beanie==1.11.0
-fastapi==0.75.2
-motor==2.5.1
-pydantic==1.9.0
-python-dotenv==0.20.0
-
+pydantic~=1.9.0
+beanie~=1.11.0
+motor~=3.0.0
+fastapi~=0.78.0
 sendgrid~=6.9.7
+python-dotenv~=0.20.0
