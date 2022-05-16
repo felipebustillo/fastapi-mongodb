@@ -8,6 +8,7 @@ from pydantic import EmailStr, BaseModel
 class User(Document):
     first_name: str
     last_name: str
+    username: str
     email: EmailStr
     hashed_password: str
     is_active = True

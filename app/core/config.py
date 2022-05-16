@@ -12,7 +12,6 @@ load_dotenv()
 class CommonSettings(BaseSettings):
     APP_NAME: str = os.getenv("APP_NAME")
     API_V1_STR: str = "/api/v1"
-    SECRET_KEY: str = os.getenv("SECRET_KEY")
 
 
 class ServerSettings(BaseSettings):
