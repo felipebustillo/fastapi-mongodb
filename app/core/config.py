@@ -29,7 +29,7 @@ class DatabaseSettings(BaseSettings):
 
 class AuthSettings(BaseSettings):
     JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     SECURE_COOKIE: bool = False
     # Google authentication
     GOOGLE_OAUTH_CLIENT_ID: str = os.getenv("GOOGLE_OAUTH_CLIENT_ID")

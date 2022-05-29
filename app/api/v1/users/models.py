@@ -9,7 +9,8 @@ class User(Document):
     first_name: Optional[str]
     last_name: Optional[str]
     email: EmailStr
-    password: str
+    token: str
+    hashed_password: str
     is_active = True
     is_verified = False
     role = "user"
@@ -18,8 +19,11 @@ class User(Document):
     updated = datetime.utcnow()
 
     @classmethod
-    async def by_email(cls, email: EmailStr):
-        return await cls.find_one(cls.email == email)
+    def by_email(cls, email: EmailStr):
+        return cls.find_one(cls.email == email)
+
+    class Settings:
+        name = "users"
 
 
 class UserRegister(BaseModel):
