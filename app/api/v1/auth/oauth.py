@@ -12,7 +12,7 @@ from app.core.security import ALGORITHM, verify_password
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/jwt/login")
 
 
-def authenticate_user(email: EmailStr, password: str):
+async def authenticate_user(email: EmailStr, password: str):
     user = await User.by_email(email)
     if not user:
         return False

@@ -3,7 +3,7 @@ from typing import List
 
 from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseSettings, AnyHttpUrl, EmailStr
+from pydantic import BaseSettings, AnyHttpUrl
 from sendgrid import SendGridAPIClient
 
 load_dotenv()
@@ -41,7 +41,7 @@ class MailSettings(BaseSettings):
 
 
 class AdminSettings(BaseSettings):
-    FIRST_SUPERUSER: EmailStr = os.getenv("FIRST_SUPERUSER")
+    FIRST_SUPERUSER: str = os.getenv("FIRST_SUPERUSER")
     FIRST_SUPERUSER_PASSWORD: str = os.getenv("FIRST_SUPERUSER_PASSWORD")
     USERS_OPEN_REGISTRATION: bool = False
 

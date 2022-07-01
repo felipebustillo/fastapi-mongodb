@@ -1,7 +1,11 @@
+bcrypt~=3.2.2
 pydantic~=1.9.0
 beanie~=1.11.0
 motor~=2.5.1
 fastapi~=0.75.2
 sendgrid~=6.9.7
 python-dotenv~=0.20.0
+python-jose~=3.3.0
 passlib~=1.7.4
+uvicorn~=0.17.6
+starlette~=0.17.1
