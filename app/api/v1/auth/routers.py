@@ -4,10 +4,9 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from starlette.responses import JSONResponse
 
-from app.api.v1.auth.mail import send_verification_email
 from app.api.v1.auth.models import Token
 from app.api.v1.auth.oauth import get_current_active_user, authenticate_user
-from app.api.v1.users.models import UserRegister, User
+from app.api.v1.users.models import User, UserRegister
 from app.core.config import settings
 from app.core.security import get_password_hash, create_access_token
 
@@ -29,7 +28,7 @@ async def register(user_register: UserRegister):
         hashed_password=get_password_hash(user_register.password)
     )
     await user.insert()
-    await send_verification_email(user)
+    # await send_verification_email(user)
     return JSONResponse(status_code=201, content="User registered")
 
 
