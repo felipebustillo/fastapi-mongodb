@@ -13,11 +13,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/jwt/login")
 
 
 async def authenticate_user(email: EmailStr, password: str):
-    user = await User.by_email(email)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
+    user = await User.find_one(User.email == email)
+    password = await verify_password(password, user.hashed_password)
+    if not user or not password:
+        raise HTTPException(
+            status_code=401,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
     return user
 
 
@@ -35,19 +38,19 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(email=email)
     except JWTError:
         raise credentials_exception
-    user = User.by_email(token_data.email)
+    user = await User.find_one(User.email == EmailStr(token_data.email))
     if user is None:
         raise credentials_exception
     return user
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)):
-    if current_user.is_active is False:
+async def get_current_active_user(user: User = Depends(get_current_user)):
+    if user.is_active is False:
         raise HTTPException(status_code=403, detail="Inactive user")
-    return current_user
+    return user
 
 
-async def get_current_verified_user(current_user: User = Depends(get_current_active_user)):
-    if current_user.is_verified is False:
+async def get_current_verified_user(user: User = Depends(get_current_active_user)):
+    if user.is_verified is False:
         raise HTTPException(status_code=403, detail="Unverified user")
-    return current_user
+    return user

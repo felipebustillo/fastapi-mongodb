@@ -33,8 +33,17 @@ class UserLogin(BaseModel):
     password: str
 
 
+class UserOut(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    password: Optional[str]
+
+
 class UserUpdate(BaseModel):
-    first_name: str
-    last_name: str
-    email: EmailStr
-    password: str
+    first_name: Optional[str]
+    last_name: Optional[str]
+    password: Optional[str]
+    is_active: Optional[bool]
+    is_verified: Optional[bool]
+    role: Optional[List[str]]
+    updated = datetime.utcnow()

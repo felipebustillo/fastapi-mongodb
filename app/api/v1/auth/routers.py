@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import EmailStr
 from starlette.responses import JSONResponse
 
 from app.api.v1.auth.models import Token
@@ -18,7 +19,7 @@ router = APIRouter(
 
 @router.post("/register")
 async def register(user_register: UserRegister):
-    user = await User.by_email(user_register.email)
+    user = await User.find_one(User.email == user_register.email)
     if user is not None:
         raise HTTPException(status_code=409, detail="An user with that email already exists")
     user = User(
@@ -38,10 +39,9 @@ async def verify(token: str = Depends(get_current_active_user)):
     return JSONResponse(status_code=200, content="User verified")
 
 
-@router.post("/jwt/login", response_model=Token)
+@router.post("/login", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
-    username = form_data.username
-    user = authenticate_user(form_data.username, form_data.password)
+    user = await authenticate_user(EmailStr(form_data.username), form_data.password)
     if not user:
         raise HTTPException(
             status_code=401,
