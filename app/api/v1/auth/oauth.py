@@ -14,7 +14,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/jwt/login")
 
 async def authenticate_user(email: EmailStr, password: str):
     user = await User.find_one(User.email == email)
-    password = await verify_password(password, user.hashed_password)
+    password = verify_password(password, user.hashed_password)
     if not user or not password:
         raise HTTPException(
             status_code=401,
@@ -22,6 +22,11 @@ async def authenticate_user(email: EmailStr, password: str):
             headers={"WWW-Authenticate": "Bearer"}
         )
     return user
+
+
+async def update_password(user: User, password: str):
+    user.hashed_password = verify_password(password, user.hashed_password)
+    await user.save()
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):
@@ -32,7 +37,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
+        email: EmailStr = payload.get("sub")
         if email is None:
             raise credentials_exception
         token_data = TokenData(email=email)
@@ -53,4 +58,10 @@ async def get_current_active_user(user: User = Depends(get_current_user)):
 async def get_current_verified_user(user: User = Depends(get_current_active_user)):
     if user.is_verified is False:
         raise HTTPException(status_code=403, detail="Unverified user")
+    return user
+
+
+async def get_current_admin(user: User = Depends(get_current_user)):
+    if "admin" not in user.role:
+        raise HTTPException(status_code=401, detail="Unauthorized user")
     return user

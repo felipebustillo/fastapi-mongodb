@@ -21,6 +21,16 @@ class User(Document):
         name = "users"
 
 
+class UserUpdate(BaseModel):
+    first_name: Optional[str]
+    last_name: Optional[str]
+    password: Optional[str]
+    is_active: Optional[bool]
+    is_verified: Optional[bool]
+    role: Optional[List[str]]
+    updated = datetime.utcnow()
+
+
 class UserRegister(BaseModel):
     first_name: str
     last_name: str
@@ -34,16 +44,13 @@ class UserLogin(BaseModel):
 
 
 class UserOut(BaseModel):
-    first_name: Optional[str]
-    last_name: Optional[str]
-    password: Optional[str]
+    first_name: str
+    last_name: str
+    email: EmailStr
 
 
-class UserUpdate(BaseModel):
+class UserUpdateCurrent(BaseModel):
     first_name: Optional[str]
     last_name: Optional[str]
+    email: Optional[EmailStr]
     password: Optional[str]
-    is_active: Optional[bool]
-    is_verified: Optional[bool]
-    role: Optional[List[str]]
-    updated = datetime.utcnow()
